@@ -1,0 +1,72 @@
+﻿@model Irsad.Models.ViewModels.AddProductVM
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Product</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create"  enctype="multipart/form-data">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Price" class="control-label"></label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Count" class="control-label"></label>
+                <input asp-for="Count" class="form-control" />
+                <span asp-validation-for="Count" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ImageUrl" class="control-label"></label>
+                <input type="file" asp-for=ImageUrl />
+            </div>
+            <div class="form-group">
+                <select multiple="multiple" style="width:350px; margin:10px" class="chosen-select" asp-for=TagIds asp-items=@ViewBag.Tags></select>   
+            </div>
+            <div class="form-group">
+                <label asp-for="CategoryId" class="control-label"></label>
+                <select asp-for="CategoryId" class ="form-control" asp-items="ViewBag.CategoryId"></select>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index" class="btn btn-primary">Back to List</a>
+</div>
+
+@section Scripts {
+    <link href="https://harvesthq.github.io/chosen/chosen.css" rel="stylesheet" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="https://harvesthq.github.io/chosen/chosen.jquery.js"></script>
+    <script src="~/lib/chosen/chosen.jquery.js"></script>
+    <script>
+        $(".chosen-select").chosen();
+        $(".chosen-select").on('change', function (event, el) {
+            var selected_element = $(".chosen-select option:contains(" + el.selected + ")");
+            var selected_value = selected_element.val();
+            var parent_optgroup = selected_element.closest('optgroup').attr('label');
+            var parent_optgroup_class = selected_element.closest('optgroup').attr('class');
+            $(".search-choice:last > span").css("background-color", parent_optgroup_class);
+            selected_element.text(parent_optgroup + ' - ' + selected_value);
+
+            //$(selected_element).addClass(`${parent_optgroup_class}`);
+        });
+    </script>
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
